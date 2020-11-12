@@ -1,0 +1,347 @@
+<!-- Skip to content Search or jump to… Pull requests Issues Marketplace Explore
+@Evgeni67 Strive-School-Fall-2020 / M3-D8-CRUD-PT1 0 01 Code Issues Pull
+requests Actions Projects Wiki Security Insights M3-D8-CRUD-PT1/backoffice.html
+@irvelervel irvelervel Adds all the files. Latest commit 3ae4efe 8 hours ago
+History 1 contributor 167 lines (153 sloc) 5.41 KB
+You are building the new Amazon.
+            This time you are also responsible for the back office.
+            THIS is you CRUD endpoint
+            https://striveschool-api.herokuapp.com/api/product/
+            The product model is 
+            {
+                "_id": "5d318e1a8541744830bef139", //SERVER GENERATED
+                "name": "app test 1",  //REQUIRED
+                "description": "somthing longer", //REQUIRED
+                "brand": "nokia", //REQUIRED
+                "imageUrl": "https://drop.ndtv.com/TECH/product_database/images/2152017124957PM_635_nokia_3310.jpeg?downsize=*:420&output-quality=80", //REQUIRED
+                "price": 100, //REQUIRED
+                "userId": "admin", //SERVER GENERATED
+                "createdAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
+                "updatedAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
+                "__v": 0 //SERVER GENERATED
+            }
+            
+            #---------------------------------------------------------------#
+            EVERY REST API CALL SHOULD BE AUTHENTICATED. 
+            Every request to the API should use Token Based Authentication to secure access to the contents.
+            You can get your token by registering on: strive.school/studentlogin
+            Authorization: Bearer ###########
+            Where ######### is the access_token returned by the endpoint.
+            #---------------------------------------------------------------#
+            Today you have to implement:
+            - A backoffice page, where you can insert the product by specifying the parameters -->
+            <!-- - A front page, where the user can see the available products             Today you have to implement:
+            - In the backoffice page
+                a) Add a button and the functionality to EDIT a single product ( PUT  endpoint/{id})
+                b) Add a button and the functionality to DELETE a single product ( DELETE endpoint/{id})
+                c) Add validation to the product creation/edit form
+                d) Display an error message if something goes wrong
+            - In the front page
+                a) Add a loader while waiting for the product to load
+                b) Add a link on each item to go to a detail page
+            - Create a new detail page where you are going to display the item information
+-->
+            
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+  </head>
+<style>
+  .card-img-top{
+                border-radius: 15px;
+              }
+              .price{
+                position: absolute;
+                bottom: 0;
+                right: 30px;
+                border-radius: 15px;
+                font-size: 22px;
+              }
+              .row.products{
+                margin-top: 300px;
+                justify-content: center;
+              }
+                .card-body{
+                    background-color: gray;
+                    color:black;
+                    border-radius: 15px;
+                    height: 300px;
+                }
+                .listOfProducts{
+                    position: relative;;
+                    margin: auto;
+                }
+                body{
+                    background-color:black;
+                }
+                .navbar{
+                    background:grey
+                }
+               
+                .nav-link{
+                  
+                  font-size: 60px;
+                  background-color: whitesmoke ;
+                          opacity: 0.5;
+                          border-radius: 30px;
+                          transition: 0.3s;
+                }
+                .nav-link:hover {
+                          background-color: whitesmoke ;
+                          opacity: 0.5;
+                          border-radius: 30px;
+                          transition: 0.3s;
+                }
+    body{
+      background-color: black;
+    }
+    
+    .btn:hover{
+      opacity: 0.85;
+      transition: 0.3s;
+    }
+    .container{
+      color: whitesmoke;
+    }
+
+</style>
+<nav class="navbar navbar-expand-lg navbar-light">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href = "./skeleton.html">Back Office <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href = "./shop.html">Shop <span class="sr-only">(current)</span></a>
+                      </li>
+                  </ul>
+                </div>
+              </nav>
+  
+
+
+ 
+  <div class="container">
+    <h2 class="text-center mt-5">Add new product</h2>
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <form onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="name">Product Image Url</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="image"
+                  placeholder="URL"
+                />
+              </div>
+          <div class="form-group">
+            <label for="name">Product Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              placeholder="Write the name of the product ot add"
+            />
+          </div>
+          <div class="form-group">
+            <label for="name">Product Brand</label>
+            <input
+              type="text"
+              class="form-control"
+              id="brand"
+              placeholder="Write the name of the products brand"
+            />
+          </div>
+          <div class="form-group">
+            <label for="description">Product Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              rows="3"
+              placeholder="Write here the product description"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="price">Product Price</label>
+            <input
+              type="number"
+              class="form-control"
+              id="price"
+              placeholder="Write here the price"
+            />
+          </div>
+
+         
+
+          <div class="form-group">
+            <button
+              class="btn btn-primary"
+              type="submit"
+              value="Submit event"
+            >
+              Add Product
+            </button>
+            <span
+                  class="spinner-border spinner-border-sm d-none"
+                  role="status"
+                  aria-hidden="true"
+                  id="loadingSpinner"
+                ></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Footer Links -->
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2020 Copyright:
+    <a href=""> NotBootstrap</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+  <script>
+      window.onload = async () => {
+        
+        let urlParams = new URLSearchParams(window.location.search);
+        id = urlParams.get("id");
+        if (id) {
+          let response = await fetch("https://striveschool-api.herokuapp.com/api/product/" + id,{
+            headers: new Headers({
+              // we need also to declare the content type
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFiYzVkZDRiY2RlMTAwMTc2MTZhOGEiLCJpYXQiOjE2MDUxMDE4NDYsImV4cCI6MTYwNjMxMTQ0Nn0.xVUPVAU5SCXoMhfv62Zd68K0AzOrboL8AfZxnFRHIMA"
+            }),
+            
+          }); 
+          let event = await response.json(); 
+          document.getElementById("name").value = event.name;
+          document.getElementById("brand").value = event.brand;
+          document.getElementById("description").value = event.description;
+          document.getElementById("price").value = event.price;
+          document.getElementById("image").value = event.imageUrl;
+          document.querySelector(".text-center.mt-5").innerText = "Change Product Details"
+         document.querySelector(".btn").innerText = "Change Product"
+      
+        }
+      }
+    const addObjectToServer = async () => {
+      
+        
+        let urlParams = new URLSearchParams(window.location.search);
+        id = urlParams.get("id");
+       
+          let myEvent = {
+          // gathering the data from the form, field by field
+        
+                name: document.querySelector("#name").value,
+                description: document.querySelector("#description").value,
+                brand: document.querySelector("#brand").value,
+                imageUrl: document.querySelector("#image").value,
+                price: document.querySelector("#price").value,
+        }
+        try{
+          if(id){
+            let response = await fetch("https://striveschool-api.herokuapp.com/api/product/" + id, {
+            // our POST request is made with the fetch method as well!
+            method: "PUT", // declaring the CRUD method
+            body: JSON.stringify(myEvent), // we need to stringify the JS object in order to send it
+            headers: new Headers({
+              // we need also to declare the content type
+              "Content-Type": "application/json",
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFiYzVkZDRiY2RlMTAwMTc2MTZhOGEiLCJpYXQiOjE2MDUxMDE4NDYsImV4cCI6MTYwNjMxMTQ0Nn0.xVUPVAU5SCXoMhfv62Zd68K0AzOrboL8AfZxnFRHIMA"
+            }),
+          });
+          alert("Item Changed Succesfully")
+        }else{
+          let response = await fetch("https://striveschool-api.herokuapp.com/api/product/", {
+            // our POST request is made with the fetch method as well!
+            method: "POST", // declaring the CRUD method
+            body: JSON.stringify(myEvent), // we need to stringify the JS object in order to send it
+            headers: new Headers({
+              // we need also to declare the content type
+              "Content-Type": "application/json",
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFiYzVkZDRiY2RlMTAwMTc2MTZhOGEiLCJpYXQiOjE2MDUxMDE4NDYsImV4cCI6MTYwNjMxMTQ0Nn0.xVUPVAU5SCXoMhfv62Zd68K0AzOrboL8AfZxnFRHIMA"
+            }),
+          });
+          alert("Item Added Succesfully")
+        }
+        }catch(error){
+          console.log("This error comes from line 207-229 / " + error)
+        }
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault(); // preventing the default browser event handling
+        addObjectToServer();
+      };
+     </script>
+     <script>
+    const loadPage = async() => {
+try{
+  fetch("https://striveschool-api.herokuapp.com/api/product/", {
+headers: new Headers({
+"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFiYzVkZDRiY2RlMTAwMTc2MTZhOGEiLCJpYXQiOjE2MDUxMDE4NDYsImV4cCI6MTYwNjMxMTQ0Nn0.xVUPVAU5SCXoMhfv62Zd68K0AzOrboL8AfZxnFRHIMA"
+})
+}) .then((response) => response.json())
+          .then((data) => { console.log(data)
+          })
+}catch(error){
+console.log("This error comes form line 242-248 / " + error)
+}
+        
+};
+
+
+
+
+        
+    
+  
+
+</script>
+
+    
+
+    
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+ 
+</html>

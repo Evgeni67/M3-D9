@@ -1,0 +1,238 @@
+<!-- Skip to content Search or jump to… Pull requests Issues Marketplace Explore
+@Evgeni67 Strive-School-Fall-2020 / M3-D8-CRUD-PT1 0 01 Code Issues Pull
+requests Actions Projects Wiki Security Insights M3-D8-CRUD-PT1/backoffice.html
+@irvelervel irvelervel Adds all the files. Latest commit 3ae4efe 8 hours ago
+History 1 contributor 167 lines (153 sloc) 5.41 KB
+You are building the new Amazon.
+            This time you are also responsible for the back office.
+            THIS is you CRUD endpoint
+            https://striveschool-api.herokuapp.com/api/product/
+            The product model is 
+            {
+                "_id": "5d318e1a8541744830bef139", //SERVER GENERATED
+                "name": "app test 1",  //REQUIRED
+                "description": "somthing longer", //REQUIRED
+                "brand": "nokia", //REQUIRED
+                "imageUrl": "https://drop.ndtv.com/TECH/product_database/images/2152017124957PM_635_nokia_3310.jpeg?downsize=*:420&output-quality=80", //REQUIRED
+                "price": 100, //REQUIRED
+                "userId": "admin", //SERVER GENERATED
+                "createdAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
+                "updatedAt": "2019-07-19T09:32:10.535Z", //SERVER GENERATED
+                "__v": 0 //SERVER GENERATED
+            }
+            #---------------------------------------------------------------#
+            EVERY REST API CALL SHOULD BE AUTHENTICATED. 
+            Every request to the API should use Token Based Authentication to secure access to the contents.
+            You can get your token by registering on: strive.school/studentlogin
+            Authorization: Bearer ###########
+            Where ######### is the access_token returned by the endpoint.
+            #---------------------------------------------------------------#
+            Today you have to implement:
+            - A backoffice page, where you can insert the product by specifying the parameters -->
+            <!-- - A front page, where the user can see the available products -->
+
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                <!-- Required meta tags -->
+                <meta charset="utf-8" />
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                />
+            
+                <!-- Bootstrap CSS -->
+                <link
+                  rel="stylesheet"
+                  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+                  integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+                  crossorigin="anonymous"
+                />
+              </head>
+            <style>
+              .card-img-top{
+                border-radius: 15px;
+              }
+              .price{
+                font-size: 22px;
+              }
+              .btn.prop{
+                background-color: whitesmoke;
+                margin-left: 14px;
+              }
+              .row.products{
+                margin-top: 300px;
+                justify-content: center;
+              }
+                .card-body{
+                    background-color: gray;
+                    color:black;
+                    border-radius: 15px;
+                    height:500px;
+
+                }
+                .listOfProducts{
+                    position: relative;;
+                    margin: auto;
+                }
+                body{
+                    background-color:black;
+                }
+                .navbar{
+                    background:grey
+                }
+               
+                .nav-link{
+                  
+                  font-size: 60px;
+                  background-color: whitesmoke ;
+                          opacity: 0.77;
+                          border-radius: 30px;
+                          margin-left: 10px;
+                }
+                .nav-link:hover {
+                          background-color: whitesmoke ;
+                          opacity: 0.5;
+                          border-radius: 30px;
+                }
+    body{
+      background-color: black;
+    }
+    .row.btns{
+      display: flex;
+      justify-content: center;
+      position: relative;
+      bottom: 0;
+    }
+    .btn:hover{
+      opacity: 0.85;
+      transition: 0.3s;
+    }
+    .container{
+      color: whitesmoke;
+    }
+    .fa.fa-mobile{
+      margin-top: 10px;
+      margin-right: 30px;
+      margin-left: 15px;
+    }
+
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+              
+
+
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li>
+                      <i class="fa fa-mobile fa-5x" aria-hidden="true"></i>
+
+                    </li>
+                    <li class="nav-item active">
+                      <a class="nav-link" href = "./skeleton.html">Back Office <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href = "./shop.html">Shop <span class="sr-only">(current)</span></a>
+                      </li>
+                  </ul>
+                </div>
+              </nav>
+            
+              <div class = "row products">
+            
+            </div>
+        </div>
+            
+          
+                 <script>
+                     window.onload = () => {
+                         loadPage()
+                     }
+                const loadPage = async () => {
+                    fetch("https://striveschool-api.herokuapp.com/api/product/", {
+            headers: new Headers({
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFiYzVkZDRiY2RlMTAwMTc2MTZhOGEiLCJpYXQiOjE2MDUxMDE4NDYsImV4cCI6MTYwNjMxMTQ0Nn0.xVUPVAU5SCXoMhfv62Zd68K0AzOrboL8AfZxnFRHIMA"
+            })
+            }) .then((response) => response.json())
+                      .then((data) => { 
+                          let getRow = document.querySelector(".row.products")
+                          data.forEach(element => {
+                          let copyOfItem = document.createElement("div")
+                          var id = element._id
+                          copyOfItem.innerHTML = `<div class = "col col-4><div class="card" style="width: 16rem">
+                <img src="${element.imageUrl}" class="card-img-top" alt="" />
+                <div class="card-body">
+                  <h5 class="card-title">${element.name}</h5>
+                  <p class="card-text">
+                   Brand:${element.brand}
+                  </p>
+                  <p class="card-text">
+                  Description: ${element.description}
+                  </p>
+                  <div class="row btns">
+                    <a href="#" class="btn prop">Buy</a>
+                    <p class="price" style = "margin-left:18px"><strong>£${element.price}</strong></p>
+
+                    <a href="#" class="btn prop" onclick = "handleEdit('${element._id}')">Edit</a>
+                    
+                    </div>
+                    <div class = "row btns">
+                      <a href="#" class="btn prop" onclick = "handleDelete('${element._id}')">Delete</a>
+                      <a href="#" class="btn prop" onclick = "handleDetails('${element._id}')">Details</a>
+                      
+                    </div>
+                   
+                  </div>
+                </div>
+              </div>""
+              </div>`
+              
+              console.log(element.imageUrl)
+              getRow.appendChild(copyOfItem)
+                      })
+                    });
+                }
+
+                    const handleDelete = async (id) => {
+                    const response = await fetch("https://striveschool-api.herokuapp.com/api/product/" + id,{
+                       method:"Delete",
+                       headers: new Headers({
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFiYzVkZDRiY2RlMTAwMTc2MTZhOGEiLCJpYXQiOjE2MDUxMDE4NDYsImV4cCI6MTYwNjMxMTQ0Nn0.xVUPVAU5SCXoMhfv62Zd68K0AzOrboL8AfZxnFRHIMA"
+            })
+                     })
+                     location.reload();
+                      }
+                    const handleDetails = async(id) => {
+                      location.href = "details.html?id=" + id;
+                    }
+const handleEdit = async (id) => {
+  location.href = "skeleton.html?id=" + id;
+}
+            </script>
+            
+                
+            
+            
+                <!-- Optional JavaScript -->
+                <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+                <script
+                  src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+                  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+                  crossorigin="anonymous"
+                ></script>
+                <script
+                  src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                  crossorigin="anonymous"
+                ></script>
+                <script
+                  src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+                  integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+                  crossorigin="anonymous"
+                ></script>
+             
+            </html>
+            
